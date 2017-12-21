@@ -4,17 +4,24 @@ import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
+import android.widget.Button;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class MainActivity extends AppCompatActivity {
+import java.util.ArrayList;
+import java.util.List;
 
+public class MainActivity extends AppCompatActivity {
+    Button df_button;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        FragmentManager fragmentManager
 
         JSONObject jsonObject = new JSONObject();
         try {
@@ -52,8 +59,29 @@ public class MainActivity extends AppCompatActivity {
                     .put("author", "Mark Twain")
                     .put("publishingYear", 1862)));
 
+            Log.e("JSON Object", jsonObject.toString());
+
         } catch (JSONException e) {
             e.printStackTrace();
         }
+    }
+    public void JSONparse(String str){
+        try {
+            JSONObject jsonObject = new JSONObject(str);
+            JSONArray jsonArray = jsonObject.getJSONArray("books");
+
+            List<Book> bookList = new ArrayList<>();
+            for (int i = 0; i < jsonArray.length() ; i++) {
+                JSONObject jsonObject1 = (JSONObject) jsonArray.get(i);
+                Book book = new Book();
+                String objectTitle = jsonObject1.getString("title");
+                book.setTitle(objectTitle);
+                bookList.add(book);
+
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
     }
 }
